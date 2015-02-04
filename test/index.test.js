@@ -6,6 +6,11 @@ var test = require('tape'),
     crypto = require('crypto'),
     wgs84 = path.join(__dirname, 'fixtures', 'wgs84', 'wgs84.shp');
 
+function truncate(num) {
+  return Math.floor(num * Math.pow(10, 6)) / Math.pow(10, 6);
+}
+
+
 test('reprojects', function(assert) {
   var outfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex') + '.shp');
   console.log(outfile);
@@ -36,6 +41,14 @@ test('reprojects', function(assert) {
           ]
         };
 
+    expectedGeom.coordinates = expectedGeom.coordinates.map(function(polygon) {
+      return polygon.map(function(ring) {
+        return ring.map(function(point) {
+          return point.map(truncate);
+        });
+      });
+    });
+
     ds.layers.forEach(function(layer) {
       if (i > 0) assert.fail('should have only one layer');
       i++;
@@ -45,6 +58,14 @@ test('reprojects', function(assert) {
 
       var feature = layer.features.get(0),
           geojson = JSON.parse(feature.getGeometry().toJSON());
+
+      geojson.coordinates = geojson.coordinates.map(function(polygon) {
+        return polygon.map(function(ring) {
+          return ring.map(function(point) {
+            return point.map(truncate);
+          });
+        });
+      });
 
       assert.deepEqual(geojson, expectedGeom, 'checked feature has proper coordinates');
     });
