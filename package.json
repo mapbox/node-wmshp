@@ -1,0 +1,36 @@
+{
+  "name": "node-wmshp",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/jshint index.js test/*.js bin/*.js && tape test/*.test.js"
+  },
+  "bin": {
+    "wmshp": "bin/wmshp.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/node-wmshp.git"
+  },
+  "author": "Mapbox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mapbox/node-wmshp/issues"
+  },
+  "homepage": "https://github.com/mapbox/node-wmshp",
+  "dependencies": {
+    "gdal": "^0.4.1"
+  },
+  "devDependencies": {
+    "jshint": "^2.6.0",
+    "tape": "^3.5.0"
+  },
+  "jshintConfig": {
+    "node": true,
+    "globalstrict": false,
+    "undef": true,
+    "unused": true,
+    "noarg": true
+  }
+}
