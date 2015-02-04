@@ -3,6 +3,7 @@ var test = require('tape'),
     gdal = require('gdal'),
     path = require('path'),
     os = require('os'),
+    fs = require('fs'),
     crypto = require('crypto'),
     wgs84 = path.join(__dirname, 'fixtures', 'wgs84', 'wgs84.shp');
 
@@ -10,10 +11,8 @@ function truncate(num) {
   return Math.floor(num * Math.pow(10, 6)) / Math.pow(10, 6);
 }
 
-
 test('reprojects', function(assert) {
   var outfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex') + '.shp');
-  console.log(outfile);
   wmshp(wgs84, outfile, function(err) {
     assert.ifError(err, 'no error');
     var ds = gdal.open(outfile),
@@ -71,5 +70,51 @@ test('reprojects', function(assert) {
     });
 
     assert.end();
+  });
+});
+
+test('reproject into a folder', function(assert) {
+  var outfolder = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+  wmshp(wgs84, outfolder, function(err) {
+    assert.ifError(err, 'no error');
+
+    fs.readdir(outfolder, function(err, files) {
+      if (err) throw err;
+
+      assert.equal(files.length, 4, 'gdal creates four files');
+      var extensions = files.map(function(filename) {
+        return path.extname(filename);
+      });
+
+      ['.dbf', '.prj', '.shp', '.shx'].forEach(function(extension) {
+        assert.ok(extensions.indexOf(extension) > -1, extension + ' file created');
+      });
+
+      assert.end();
+    });
+  });
+});
+
+test('reproject from a folder', function(assert) {
+  var outfolder = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex')),
+      infolder = path.dirname(wgs84);
+  wmshp(infolder, outfolder, function(err) {
+    assert.ifError(err, 'no error');
+
+    fs.readdir(outfolder, function(err, files) {
+      if (err) throw err;
+
+      assert.equal(files.length, 4, 'gdal creates four files');
+      var extensions = files.map(function(filename) {
+        return path.extname(filename);
+      });
+
+      ['.dbf', '.prj', '.shp', '.shx'].forEach(function(extension) {
+        assert.ok(extensions.indexOf(extension) > -1, extension + ' file created');
+      });
+      console.log(outfolder);
+      
+      assert.end();
+    });
   });
 });
