@@ -24,8 +24,10 @@ module.exports = function(infile, outfile, callback) {
   catch (err) { return callback(err); }
 
   inLayer.features.forEach(function(feature) {
+    var projected = feature.clone();
+    var geom;
+
     try {
-      var projected = feature.clone(),
         geom = projected.getGeometry();
     } catch (err) {
       // for now, catch null geometries, dont reproject them, add, and continue with next feature
