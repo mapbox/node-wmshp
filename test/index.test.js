@@ -79,17 +79,13 @@ test('Allow null geometry', function(assert) {
   wmshp(nullgeom, outfile, function(err){
     assert.ifError(err, 'no error');
     var ds = gdal.open(outfile);
-    //var expectedGeom = { type: 'Point', coordinates: [null, null] };
 
     ds.layers.forEach(function(layer) {
       assert.equal(layer.features.count(), 1, 'reprojected all features');
+      var feature = layer.features.get(0),
+          geojson = feature.getGeometry();
       
-      // Once node-gdal supports null geoms, check for null expected geom
-      
-      // var feature = layer.features.get(0),
-      //     geojson = JSON.parse(feature.getGeometry().toJSON());
-      
-      // assert.deepEqual(geojson, expectedGeom, 'checked feature has proper coordinates');
+      assert.deepEqual(geojson, null, 'checked feature has proper coordinates');
     });
     
     assert.end();
