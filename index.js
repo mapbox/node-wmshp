@@ -2,10 +2,6 @@ var gdal = require('gdal');
 
 module.exports = function(infile, outfile, callback) {
   var sm = gdal.SpatialReference.fromEPSG(3857);
-  var world = gdal.Geometry.fromWKT(
-    'POLYGON((-180 -85.05133, 180 -85.05133, 180 85.05133, -180 85.05133, -180 -85.05133))',
-    gdal.SpatialReference.fromEPSG(4326)
-  );
   var inDs;
   var outDs;
 
@@ -41,7 +37,6 @@ module.exports = function(infile, outfile, callback) {
       return;
     }
 
-    geom = geom.intersection(world);
     geom.transformTo(sm);
     projected.setGeometry(geom);
     outLayer.features.add(projected);
