@@ -36,8 +36,12 @@ module.exports = function(infile, outfile, callback) {
       outLayer.features.add(projected);
       return;
     }
+    
+    try {
+      geom.transformTo(sm);
+    } 
+    catch (err) { return callback(err); }
 
-    geom.transformTo(sm);
     projected.setGeometry(geom);
     outLayer.features.add(projected);
   });

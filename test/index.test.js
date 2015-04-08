@@ -7,7 +7,7 @@ var fs = require('fs');
 var crypto = require('crypto');
 var wgs84 = path.join(__dirname, 'fixtures', 'wgs84', 'wgs84.shp');
 var nullgeom = path.join(__dirname, 'fixtures', 'nullgeom', 'null_geom.shp');
-//var poles = path.join(__dirname, 'fixtures', 'poles', 'poles.shp');
+var partial = path.join(__dirname, 'fixtures', 'partial', 'partial.shp');
 
 function truncate(num) {
   return Math.floor(num * Math.pow(10, 6)) / Math.pow(10, 6);
@@ -139,24 +139,10 @@ test('reproject from a folder', function(assert) {
   });
 });
 
-// test('reproject features that go to 90/-90', function(assert) {
-//   var outfolder = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
-//   wmshp(poles, outfolder, function(err) {
-//     assert.ifError(err, 'no error');
-
-//     fs.readdir(outfolder, function(err, files) {
-//       if (err) throw err;
-
-//       assert.equal(files.length, 4, 'gdal creates four files');
-//       var extensions = files.map(function(filename) {
-//         return path.extname(filename);
-//       });
-
-//       ['.dbf', '.prj', '.shp', '.shx'].forEach(function(extension) {
-//         assert.ok(extensions.indexOf(extension) > -1, extension + ' file created');
-//       });
-
-//       assert.end();
-//     });
-//   });
-// });
+test('catch invalid extents at reprojection', function(assert) {
+  var outfolder = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+  wmshp(partial, outfolder, function(err) {
+    assert.ok(err, 'expected error');
+    assert.end();
+  });
+});
