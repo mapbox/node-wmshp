@@ -11,10 +11,4 @@ if (!infile || !outfile) {
   process.exit(1);
 }
 
-wmshp(infile, outfile, function(err) {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  process.exit(0);
-});
+wmshp(infile, outfile);

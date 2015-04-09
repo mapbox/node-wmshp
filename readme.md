@@ -16,8 +16,5 @@ In Node.js
 
 ```js
 var wmshp = require('wmshp');
-wmshp('/path/to/input.shp', '/path/to/output.shp', function(err) {
-  if (err) console.error(err);
-  else console.log('done!');
-});
+wmshp('/path/to/input.shp', '/path/to/output.shp');
 ```
