@@ -10,11 +10,14 @@ var nullgeom = path.join(__dirname, 'fixtures', 'nullgeom', 'null_geom.shp');
 var poles = path.join(__dirname, 'fixtures', 'poles', 'poles.shp');
 var stateplane = path.join(__dirname, 'fixtures', 'stateplane', 'stateplane.shp');
 var states = path.join(__dirname, 'fixtures', 'states', 'states.shp');
+var antarctica = path.join(__dirname, 'fixtures', 'antarctica', 'antarctica.shp');
+var polar = path.join(__dirname, 'fixtures', 'polar', 'polar.shp');
 var expectedwgs84 = path.join(__dirname, 'expected', 'wgs84', 'wgs84.shp');
 var expectednullgeom = path.join(__dirname, 'expected', 'nullgeom', 'null_geom.shp');
 var expectedpoles = path.join(__dirname, 'expected', 'poles', 'poles.shp');
 var expectedstateplane = path.join(__dirname, 'expected', 'stateplane', 'stateplane.shp');
 var expectedstates = path.join(__dirname, 'expected', 'states', 'states.shp');
+var expectedantarctica = path.join(__dirname, 'expected', 'antarctica', 'antarctica.shp');
 
 function truncate(num) {
   return Math.floor(num * Math.pow(10, 6)) / Math.pow(10, 6);
@@ -226,6 +229,50 @@ test('reprojects shapefiles in lambert coordinate system', function(assert) {
     });
 
     compare(outfolder, expectedstates, assert);
+
+    assert.end();
+  });
+});
+
+test('reprojects antarctica, cropped, from wgs84', function(assert) {
+  var outfolder = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+  wmshp(antarctica, outfolder);
+
+  fs.readdir(outfolder, function(err, files) {
+    if (err) throw err;
+
+    assert.equal(files.length, 4, 'gdal creates four files');
+    var extensions = files.map(function(filename) {
+      return path.extname(filename);
+    });
+
+    ['.dbf', '.prj', '.shp', '.shx'].forEach(function(extension) {
+      assert.ok(extensions.indexOf(extension) > -1, extension + ' file created');
+    });
+
+    compare(outfolder, expectedantarctica, assert);
+
+    assert.end();
+  });
+});
+
+test('reprojects antarctica, cropped, from polar stereoscopic', function(assert) {
+  var outfolder = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+  wmshp(polar, outfolder);
+
+  fs.readdir(outfolder, function(err, files) {
+    if (err) throw err;
+
+    assert.equal(files.length, 4, 'gdal creates four files');
+    var extensions = files.map(function(filename) {
+      return path.extname(filename);
+    });
+
+    ['.dbf', '.prj', '.shp', '.shx'].forEach(function(extension) {
+      assert.ok(extensions.indexOf(extension) > -1, extension + ' file created');
+    });
+
+    compare(outfolder, expectedantarctica, assert);
 
     assert.end();
   });
