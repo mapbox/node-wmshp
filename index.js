@@ -27,6 +27,9 @@ module.exports = function(infile, outfile) {
     // Originally null geometries are ok to pass through
     if (!geom || geom.isEmpty()) return outLayer.features.add(projected);
 
+    // Extremely gentle simplify won't move vertices but will remove duplicate ones
+    if (!geom.isValid()) geom = geom.simplify(0);
+
     // If we can crop features, do it
     if (world && !world.isEmpty()) geom = geom.intersection(world);
 
