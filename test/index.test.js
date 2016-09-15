@@ -56,7 +56,7 @@ test('reprojects', function(assert) {
     if (i > 0) assert.fail('should have only one layer');
     i++;
 
-    assert.ok(!layer.srs.isSame(sm), 'reprojected');
+    assert.ok(layer.srs.isSame(sm), 'reprojected');
     assert.equal(layer.features.count(), 245, 'reprojected all features');
 
     var feature = layer.features.get(0);

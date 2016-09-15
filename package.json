@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/mapbox/node-wmshp",
   "dependencies": {
-    "gdal": "~0.8.0"
+    "gdal": "~0.9.3"
   },
   "devDependencies": {
     "jshint": "^2.6.0",
