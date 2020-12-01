@@ -1,6 +1,6 @@
 # node-wmshp
 
-[![Build Status](https://travis-ci.org/mapbox/node-wmshp.svg?branch=master)](https://travis-ci.org/mapbox/node-wmshp)
+[![Build Status](https://travis-ci.com/mapbox/node-wmshp.svg?branch=master)](https://travis-ci.com/mapbox/node-wmshp)
 
 Reproject shapefiles into EPSG:3857 using [node-gdal](https://github.com/naturalatlas/node-gdal).
 
